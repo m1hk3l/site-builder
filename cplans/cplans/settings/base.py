@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 
     # custom additions
     "accounts.apps.AccountsConfig",
+    "pages.apps.PagesConfig",
 ]
 
 MIDDLEWARE = [
