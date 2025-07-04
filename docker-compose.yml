@@ -2,43 +2,35 @@ services:
   wagtail:
     build:
       context: .
-      dockerfile: docker/Dockerfile.wagtail
+      dockerfile: Dockerfile.wagtail
+    working_dir: /app/cplans
     volumes:
       - ./cplans:/app/cplans
-    env_file:
-      - .env
+      - ./entrypoint.sh:/entrypoint.sh
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgres://wagtail:wagtail@db:5432/wagtail
-    command: >
-      sh -c "python manage.py migrate && \
-             python manage.py runserver 0.0.0.0:8000"
+      - DATABASE_URL=postgres://db_user:dbpassword@db:5432/db_cplans
+    command: ["sh"]
+    entrypoint: ["/bin/sh", "/entrypoint.sh"]
     ports:
       - "8000:8000"
-
-  vite:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.vite
-    volumes:
-      - ./frontend:/app/frontend:cached
-      - vite_node_modules:/app/node_modules
-    working_dir: /app
-    command: sh -c "npm run build"
+    env_file:
+      - .env.local
 
   db:
     image: postgres:17
     restart: always
     environment:
-      POSTGRES_DB: wagtail
-      POSTGRES_USER: wagtail
-      POSTGRES_PASSWORD: wagtail
+      POSTGRES_DB: db_cplans
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: dbpassword
+      POSTGRES_HOST_AUTH_METHOD: trust
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
+
 volumes:
-  vite_node_modules:
   postgres_data:

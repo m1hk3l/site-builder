@@ -1,5 +1,0 @@
-services:
-  vite:
-    command: npm run dev
-    ports:
-      - "5173:5173"
