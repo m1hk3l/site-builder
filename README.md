@@ -1,1 +1,3 @@
-# CMS for ColourPlans
+# SiteBuilder
+
+project: **generic site builder**
