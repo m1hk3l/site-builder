@@ -1,0 +1,18 @@
+{% load wagtailimages_tags %}
+<div style="background: lime; color: black; padding: 10px;">
+  DEBUG: This template is being used ✅
+</div>
+<div class="bg-red-100 p-4 text-sm">DEBUG: text_image_block.html loaded</div>
+
+<div class="md:flex gap-6 items-center max-h-[600px]">
+  {% image self.image original as img %}
+  <img
+    src="{{ img.url }}"
+    alt="{{ img.alt }}"
+    class="w-full md:w-1/2 h-auto max-h-[600px] object-contain rounded"
+  />
+
+  <div class="prose prose-base mt-4 md:mt-0 max-w-none">
+    {{ self.text|richtext }}
+  </div>
+</div>

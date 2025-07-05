@@ -34,7 +34,13 @@
     <body class="{% block body_class %}{% endblock %}">
         {% wagtailuserbar %}
 
+        {# Include header with navbar #}
+        {% include 'header.html' %}
+
         {% block content %}{% endblock %}
+
+        {# Include footer #}
+        {% include 'footer.html' %}
 
         {# Global javascript #}
         <script type="text/javascript" src="{% static 'js/cplans.js' %}"></script>

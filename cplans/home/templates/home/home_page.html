@@ -1,17 +1,52 @@
 {% extends "base.html" %}
-{% load wagtailimages_tags wagtailcore_tags %}
+{% load wagtailimages_tags wagtailcore_tags static %}
+
+{% block extra_css %}
+<!-- Force Inter font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;
+  }
+  body {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;
+  }
+  #landing-root {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-<div id="landing-root" class="flex flex-col items-center justify-center min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+<div id="landing-root" class="font-sans flex flex-col items-center justify-center min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8" style="font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;">
     {% if page.blogger_photo %}
         <div class="mb-6">
             {% image page.blogger_photo fill-200x200 class="rounded-full shadow-lg border-4 border-white" alt="Blogger photo" %}
         </div>
     {% endif %}
-    <h1 class="text-4xl font-extrabold text-gray-900 mb-4 text-center">{{ page.main_heading }}</h1>
-    <div class="prose prose-lg text-gray-700 text-center max-w-2xl mb-8">
+    <h1 class="text-4xl font-extrabold text-gray-900 mb-4 text-center" style="font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;">{{ page.main_heading }}</h1>
+    <div class="prose prose-lg text-gray-700 text-center max-w-2xl mb-8" style="font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;">
         {{ page.landing_text|richtext }}
     </div>
-    <!-- React can hydrate here if needed -->
+    <!-- React will hydrate here -->
 </div>
+
+<!-- Pass data to React -->
+<script id="landing-data" type="application/json">
+{
+  "photoUrl": "{% if page.blogger_photo %}{% image_url page.blogger_photo 'fill-200x200' %}{% endif %}",
+  "mainHeading": "{{ page.main_heading|escapejs }}",
+  "landingText": {{ page.landing_text|richtext|escapejs }}
+}
+</script>
+
+<!-- Include Vite assets -->
+{% if debug %}
+    <!-- Development: Use Vite dev server -->
+    <script type="module" src="http://localhost:5173/src/main.tsx"></script>
+{% else %}
+    <!-- Production: Use built assets -->
+    <script type="module" src="{% static 'vite-static/assets/main-D-XYCvjB.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'vite-static/assets/main-eCbR1se-.css' %}">
+{% endif %}
 {% endblock %}
